@@ -45,6 +45,7 @@ simpleDraweeViewList is List<SimpleDraweeView>，the effect is of imitating WeCh
 ### 其他方法：
 
 Other methods：
+
 设置图片描述
 
 Set picture title
