@@ -30,6 +30,8 @@ new CustomPreview(QualificationActivity.this, imgArr).show();
 ```
 imgArr是图片链接集合List<String>，效果是渐进渐出
   
+imgArr is List<String>，the effect is fadein or fadeout
+  
 法二：
 
 two：
@@ -38,15 +40,19 @@ new CustomPreview(QualificationActivity.this, imgArr, simpleDraweeViewList).show
 ```
 simpleDraweeViewList是图片对象集合List<SimpleDraweeView>，效果是仿微信从图片位置放大效果和缩小到恢复位置
   
+simpleDraweeViewList is List<SimpleDraweeView>，the effect is of imitating WeChat zoom in or zoom out from the initial postion
+  
 ### 其他方法：
 
 Other methods：
 设置图片描述
+Set picture title
 ```java
 setTitleList(List<String> titleList)
 ```
 
 设置当前第几个图片
+Set picture current position
 ```java
 setCurrentPosition(Integer currentPosition)
 ```
