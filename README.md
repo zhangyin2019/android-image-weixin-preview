@@ -5,7 +5,7 @@ Imitate WeChat picture preview, inherit AlertDialog, and it is easy to use
 
 效果如图：
 
-The following are examples of pictures:
+The example of picture:
 
 ![avatar](https://images.ylwx365.com/images/mini/63221619318502001.jpg)
 
