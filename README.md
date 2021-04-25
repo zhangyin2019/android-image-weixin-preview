@@ -30,7 +30,7 @@ new CustomPreview(QualificationActivity.this, imgArr).show();
 ```
 imgArr是图片链接集合List< String >，效果是渐进渐出
   
-imgArr is List<String>，the effect is fade in or out
+imgArr is List< String >，the effect is fade in or out
   
 法二：
 
@@ -38,9 +38,9 @@ two：
 ```java
 new CustomPreview(QualificationActivity.this, imgArr, simpleDraweeViewList).show();
 ```
-simpleDraweeViewList是图片对象集合List<SimpleDraweeView>，效果是仿微信从图片位置放大效果和缩小到恢复位置
+simpleDraweeViewList是图片对象集合List< SimpleDraweeView >，效果是仿微信从图片位置放大效果和缩小到恢复位置
   
-simpleDraweeViewList is List<SimpleDraweeView>，the effect is of imitating WeChat preview zoom in or out from the initial postion
+simpleDraweeViewList is List< SimpleDraweeView >，the effect is of imitating WeChat preview zoom in or out from the initial postion
   
 ### 其他方法：
 
