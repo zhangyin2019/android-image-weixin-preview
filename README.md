@@ -10,9 +10,11 @@ The following are examples of pictures:
 ![avatar](https://images.ylwx365.com/images/mini/63221619318502001.jpg)
 
 使用方法：
+
 How to use：
 
 法一：
+
 one：
 ```java
 new CustomPreview(QualificationActivity.this, imgArr).show();
@@ -20,6 +22,7 @@ new CustomPreview(QualificationActivity.this, imgArr).show();
 imgArr是图片链接集合List<String>，效果是渐进渐出
   
 法二：
+
 two：
 ```java
 new CustomPreview(QualificationActivity.this, imgArr, simpleDraweeViewList).show();
@@ -27,6 +30,7 @@ new CustomPreview(QualificationActivity.this, imgArr, simpleDraweeViewList).show
 simpleDraweeViewList是图片对象集合List<SimpleDraweeView>，效果是仿微信从图片位置放大效果和缩小到恢复位置
   
 其他方法：
+
 Other methods：
 设置图片描述
 ```java
