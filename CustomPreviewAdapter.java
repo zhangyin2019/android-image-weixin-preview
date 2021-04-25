@@ -1,4 +1,4 @@
-package com.sanxin.adapter;
+package com.xxx.adapter;
 
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
@@ -14,7 +14,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
-import com.sanxin.R;
+import com.xxx.R;
 
 import java.util.ArrayList;
 import java.util.List;
