@@ -10,7 +10,7 @@ The example of picture:
 ![avatar](https://images.ylwx365.com/images/mini/63221619318502001.jpg)
 
 
-## 安装：
+### 安装：
 
 Install：
 
@@ -18,8 +18,7 @@ Install：
 
 Import CustomPreview.java and CustomPreviewAdapter.java to your project
 
-
-使用方法：
+### 使用方法：
 
 How to use：
 
@@ -39,7 +38,7 @@ new CustomPreview(QualificationActivity.this, imgArr, simpleDraweeViewList).show
 ```
 simpleDraweeViewList是图片对象集合List<SimpleDraweeView>，效果是仿微信从图片位置放大效果和缩小到恢复位置
   
-其他方法：
+### 其他方法：
 
 Other methods：
 设置图片描述
