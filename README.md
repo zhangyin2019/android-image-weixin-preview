@@ -28,7 +28,7 @@ one：
 ```java
 new CustomPreview(QualificationActivity.this, imgArr).show();
 ```
-imgArr是图片链接集合“List<String>”，效果是渐进渐出
+imgArr是图片链接集合List< String >，效果是渐进渐出
   
 imgArr is List<String>，the effect is fade in or out
   
