@@ -3,11 +3,13 @@
 
 Imitate WeChat picture preview, inherit AlertDialog, and it is easy to use
 
+
 效果如图：
 
 The example of picture:
 
 ![avatar](https://images.ylwx365.com/images/mini/63221619318502001.jpg)
+
 
 安装：
 
@@ -16,6 +18,7 @@ Install：
 导入CustomPreview.java和CustomPreviewAdapter.java到项目中即可
 
 Import CustomPreview.java and CustomPreviewAdapter.java to your project
+
 
 使用方法：
 
