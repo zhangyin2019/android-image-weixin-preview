@@ -1,4 +1,4 @@
-package com.sanxin.config;
+package com.xxx.config;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
@@ -28,8 +28,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.sanxin.R;
-import com.sanxin.adapter.CustomPreviewAdapter;
+import com.xxx.R;
+import com.xxx.adapter.CustomPreviewAdapter;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
