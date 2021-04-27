@@ -14,9 +14,9 @@ The example of picture:
 
 Install：
 
-导入CustomPreview.java和CustomPreviewAdapter.java到项目中即可
+导入除开README.md的上面的文件到项目中即可
 
-Import CustomPreview.java and CustomPreviewAdapter.java to your project
+Import the above files except README.md into the project
 
 ### 使用方法：
 
