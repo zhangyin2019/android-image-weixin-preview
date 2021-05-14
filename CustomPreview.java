@@ -1,50 +1,26 @@
-package com.xxx.config;
+package com.jinvovo.jinvovoparty.config;
 
-import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Environment;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.image.ImageInfo;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.xxx.R;
-import com.xxx.adapter.CustomPreviewAdapter;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.jinvovo.jinvovoparty.R;
+import com.jinvovo.jinvovoparty.adapter.CustomPreviewAdapter;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,8 +28,8 @@ public class CustomPreview {
     Activity activity;
     View view;
     Integer currentPosition = 0;// 当前预览图片序号
-    List<SimpleDraweeView> simpleDraweeViewList;
-    Map<Integer, ImageInfo> imageInfoMap = new HashMap<>();
+    List<ImageView> imageViewList;
+    Map<Integer, Bitmap> bitmapMap = new HashMap<>();
     List<Map<String, Integer>> locationMapList;
     List<String> imgUrlList;
     List<String> titleList;
@@ -77,10 +53,10 @@ public class CustomPreview {
         this(activity, imgUrlList, null);
     }
 
-    public CustomPreview(Activity activity, List<String> imgUrlList, List<SimpleDraweeView> simpleDraweeViewList) {
+    public CustomPreview(Activity activity, List<String> imgUrlList, List<ImageView> imageViewList) {
         this.activity = activity;
         this.imgUrlList = imgUrlList;
-        this.simpleDraweeViewList = simpleDraweeViewList;
+        this.imageViewList = imageViewList;
         init();
     }
 
@@ -99,8 +75,8 @@ public class CustomPreview {
      * 部署
      */
     private void init() {
-        window_w = Utils.getDeviceInfo(activity).get("width");
-        window_h = Utils.getDeviceInfo(activity).get("height");
+        window_w = ScreenUtils.getScreenWidth();
+        window_h = ScreenUtils.getScreenHeight();
 
         // 部署dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.full_screen);
@@ -109,6 +85,14 @@ public class CustomPreview {
         dialog = builder.create();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         dialog.getWindow().setBackgroundDrawableResource(R.color.col_000000_0_per);// 内容窗透明
+        dialog.setCancelable(false);
+        dialog.setOnKeyListener((dialogInterface, i, keyEvent) -> {
+            if (i == KeyEvent.KEYCODE_BACK) {
+                exit();
+                return true;
+            }
+            return false;
+        });
 
         // 页面默认先透明
         preview_layout = view.findViewById(R.id.preview_layout);
@@ -125,17 +109,15 @@ public class CustomPreview {
                 if (titleList != null) preview_description.setText(titleList.get(currentPosition));
             }
         });
-        customPreviewAdapter = new CustomPreviewAdapter(imgUrlList, simpleDraweeViewList)
-                .setOnViewTapListener((view, x, y) -> exit())
+        customPreviewAdapter = new CustomPreviewAdapter(imgUrlList)
+                .setOnViewTapListener(view -> exit())
                 .setOnLongClickListener(v -> {
-                    int position = (int) v.getTag();
-
-                    // TODO by yourself
+                    // 自定义长按操作
 
                     return false;
                 })
-                .setImageInfoCallback((position, imageInfo) -> {
-                    imageInfoMap.put(position, imageInfo);
+                .setImageInfoCallback((position, resource) -> {
+                    bitmapMap.put(position, resource);
                     if (!isStartEffect) startEffect();
                 });
         preview_view_page.setAdapter(customPreviewAdapter);
@@ -147,6 +129,7 @@ public class CustomPreview {
     /**
      * 退出
      */
+    @SuppressWarnings("ConstantConditions")
     private void exit() {
         if (locationMapList != null) {
             // 恢复缩放
@@ -158,7 +141,7 @@ public class CustomPreview {
             int width = o.get("width");
             int height = o.get("height");
 
-            ImageInfo map = imageInfoMap.get(currentPosition);
+            Bitmap map = bitmapMap.get(currentPosition);
             int ori_width = map.getWidth();
             int ori_height = map.getHeight();
 
@@ -209,10 +192,11 @@ public class CustomPreview {
     /**
      * 启动效果
      */
+    @SuppressWarnings("ConstantConditions")
     private void startEffect() {
         isStartEffect = true;
 
-        if (imgUrlList == null && simpleDraweeViewList == null) return;
+        if (imgUrlList == null && imgUrlList == null) return;
 
         if (titleList == null) {
             preview_description.setVisibility(View.GONE);
@@ -221,10 +205,10 @@ public class CustomPreview {
         }
 
         // 仿微信效果
-        if (simpleDraweeViewList != null) {
+        if (imageViewList != null) {
             locationMapList = new ArrayList<>();
             int[] loc = new int[2];
-            for (SimpleDraweeView view1 : simpleDraweeViewList) {
+            for (ImageView view1 : imageViewList) {
                 view1.getLocationInWindow(loc);
                 Map<String, Integer> map = new HashMap<>();
                 map.put("left", loc[0]);
@@ -240,12 +224,12 @@ public class CustomPreview {
             int width = o.get("width");
             int height = o.get("height");
 
-            ImageInfo map = imageInfoMap.get(currentPosition);
+            Bitmap map = bitmapMap.get(currentPosition);
             int ori_width = map.getWidth();
             int ori_height = map.getHeight();
 
             // 初始
-            preview_layout.setAlpha(1);
+            preview_layout.animate().alpha(1f).setDuration(1).start();// 直接setAlpha会闪一下
             preview_view_page_layout.setTranslationX(left);
             preview_view_page_layout.setTranslationY(top);
             preview_view_page_layout_lp = (RelativeLayout.LayoutParams) preview_view_page_layout.getLayoutParams();
