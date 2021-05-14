@@ -1,44 +1,40 @@
-package com.xxx.adapter;
+package com.jinvovo.jinvovoparty.adapter;
 
-import android.graphics.drawable.Animatable;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.image.ImageInfo;
-import com.xxx.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.jinvovo.jinvovoparty.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.relex.photodraweeview.OnViewTapListener;
-import me.relex.photodraweeview.PhotoDraweeView;
-
 public class CustomPreviewAdapter extends RecyclerView.Adapter<CustomPreviewAdapter.CustomPreviewHolder> {
     List<String> imgUrlList;
-    List<SimpleDraweeView> simpleDraweeViewList;
-    static List<PhotoDraweeView> photoDraweeViewList = new ArrayList<>();
+    static List<PhotoView> photoViewList = new ArrayList<>();
 
-    OnViewTapListener onViewTapListener;
+    View.OnClickListener onViewTapListener;
     View.OnLongClickListener onLongClickListener;
 
     public interface Callback {
-        void onSuccess(int position, ImageInfo imageInfo);
+        void onSuccess(int position, Bitmap resource);
     }
 
     Callback imageInfoCallback;
 
-    public CustomPreviewAdapter(List<String> imgUrlList, List<SimpleDraweeView> simpleDraweeViewList) {
+    public CustomPreviewAdapter(List<String> imgUrlList) {
         this.imgUrlList = imgUrlList;
-        this.simpleDraweeViewList = simpleDraweeViewList;
     }
 
     public CustomPreviewAdapter setImageInfoCallback(Callback imageInfoCallback) {
@@ -50,7 +46,7 @@ public class CustomPreviewAdapter extends RecyclerView.Adapter<CustomPreviewAdap
      * 重置缩放大小
      */
     public void resetScale() {
-        for (PhotoDraweeView item : photoDraweeViewList) {
+        for (PhotoView item : photoViewList) {
             item.setScale(1.0f, true);
         }
     }
@@ -61,7 +57,7 @@ public class CustomPreviewAdapter extends RecyclerView.Adapter<CustomPreviewAdap
      * @param onViewTapListener -
      * @return -
      */
-    public CustomPreviewAdapter setOnViewTapListener(OnViewTapListener onViewTapListener) {
+    public CustomPreviewAdapter setOnViewTapListener(View.OnClickListener onViewTapListener) {
         this.onViewTapListener = onViewTapListener;
         return this;
     }
@@ -81,23 +77,28 @@ public class CustomPreviewAdapter extends RecyclerView.Adapter<CustomPreviewAdap
     @Override
     public CustomPreviewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_preview, parent, false);
+        Glide.with(parent).asGif()
+                .load("http://images.ylwx365.com/images/mini/73371620977260966.gif")
+                .into(((ImageView) view.findViewById(R.id.loading)));
         return new CustomPreviewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomPreviewHolder holder, int position) {
         holder.thumb.setTag(position);
-        holder.thumb.setController(Fresco.newDraweeControllerBuilder()
-                .setUri(imgUrlList.get(position))
-                .setControllerListener(new BaseControllerListener<ImageInfo>() {
+        Glide.with(holder.thumb).asBitmap().load(imgUrlList.get(position))
+                .into(new CustomTarget<Bitmap>() {
                     @Override
-                    public void onFinalImageSet(String id, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
-                        super.onFinalImageSet(id, imageInfo, animatable);
-                        holder.thumb.setPhotoUri(Uri.parse(imgUrlList.get(position)));
-                        imageInfoCallback.onSuccess(position, imageInfo);
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        holder.thumb.setImageBitmap(resource);
+                        imageInfoCallback.onSuccess(position, resource);
                     }
-                }).build());
-        holder.thumb.setOnViewTapListener(onViewTapListener);
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                    }
+                });
+        holder.thumb.setOnClickListener(onViewTapListener);
         holder.thumb.setOnLongClickListener(onLongClickListener);
     }
 
@@ -107,13 +108,13 @@ public class CustomPreviewAdapter extends RecyclerView.Adapter<CustomPreviewAdap
     }
 
     static class CustomPreviewHolder extends RecyclerView.ViewHolder {
-        PhotoDraweeView thumb;
+        PhotoView thumb;
 
         public CustomPreviewHolder(@NonNull View itemView) {
             super(itemView);
             thumb = itemView.findViewById(R.id.thumb);
 
-            CustomPreviewAdapter.photoDraweeViewList.add(thumb);
+            CustomPreviewAdapter.photoViewList.add(thumb);
         }
     }
 }
